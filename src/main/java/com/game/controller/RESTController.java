@@ -47,7 +47,7 @@ public class RESTController {
         Optional<Player> playerData = playerRepository.findById(id);
 
         return (playerData.isPresent() ? new ResponseEntity<>(playerData.get(), HttpStatus.OK) :
-                                         new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
     }
 
@@ -76,6 +76,7 @@ public class RESTController {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+
 //
 //        if (player.getName().equals(null) ||
 //            player.getName().length() > 12 ||
@@ -110,34 +111,21 @@ public class RESTController {
 //        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @RequestMapping("/addNewPlayer")
-//    public String addNewPlayer() {
-//        Player player = new Player();
-//        model.addAttribute("player", player);
-//
-//        return "player-info";
-//    }
-//
-//    @RequestMapping("/savePlayer")
-//    public String savePlayer(@ModelAttribute("player") Player player) {
-//        playerService.savePlayer(player);
-//
-//        return "redirect: /";
-//    }
-//
-//    @RequestMapping("/updateInfo")
-//    public String updatePlayer(@RequestParam("playerId") long id, Model model) {
-//        Player player = playerService.getPlayer(id);
-//        model.addAttribute("player", player);
-//
-//        return "player-info";
-//    }
-//
-//    @RequestMapping("/deletePlayer")
-//    public String deletePlayer(@RequestParam("playerId") long id) {
-//        playerService.deletePlayer(id);
-//
-//        return "redirect: /";
-//    }
+    @DeleteMapping("/players/{id}")
+    public ResponseEntity<Player> deletePlayer(@PathVariable("id") long id) {
+        Optional<Player> playerData = playerRepository.findById(id);
+
+        if (!playerData.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            playerRepository.deleteById(id);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(playerData.get(), HttpStatus.OK);
     }
+}
 
