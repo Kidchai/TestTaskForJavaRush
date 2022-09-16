@@ -115,6 +115,10 @@ public class RESTController {
     public ResponseEntity<Player> deletePlayer(@PathVariable("id") long id) {
         Optional<Player> playerData = playerRepository.findById(id);
 
+        if (id < 1) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         if (!playerData.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
