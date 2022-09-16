@@ -2,6 +2,7 @@ package com.game.controller;
 
 import com.game.entity.Player;
 import com.game.repository.PlayerRepository;
+import com.game.validator.PlayerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,12 @@ import java.util.Optional;
 public class RESTController {
 
     @Autowired
-    //private PlayerService playerService;
     PlayerRepository playerRepository;
 
     @GetMapping("/players")
     public ResponseEntity<List<Player>> getAllPlayers(@RequestParam(required = false) String title) {
         try {
-            List<Player> players = new ArrayList<Player>();
+            List<Player> players = new ArrayList<>();
             playerRepository.findAll().forEach(players::add);
 
             if (players.isEmpty()) {
@@ -45,6 +45,10 @@ public class RESTController {
     @GetMapping("/players/{id}")
     public ResponseEntity<Player> getPlayerById(@PathVariable("id") long id) {
         Optional<Player> playerData = playerRepository.findById(id);
+
+        if (id < 1) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         return (playerData.isPresent() ? new ResponseEntity<>(playerData.get(), HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -113,6 +117,7 @@ public class RESTController {
 
     @DeleteMapping("/players/{id}")
     public ResponseEntity<Player> deletePlayer(@PathVariable("id") long id) {
+
         Optional<Player> playerData = playerRepository.findById(id);
 
         if (id < 1) {
@@ -130,6 +135,63 @@ public class RESTController {
         }
 
         return new ResponseEntity<>(playerData.get(), HttpStatus.OK);
+    }
+
+    @PostMapping("/players/{id}")
+    public ResponseEntity<Player> updatePlayer(@PathVariable("id") long id, @RequestBody Player player) {
+
+        try {
+            new PlayerValidator(player.getName(), player.getTitle(), player.getExperience(), player.getBirthday());
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Player> playerData = playerRepository.findById(id);
+
+        if (id < 1) {
+            System.out.println("что-то пошло не так в методе обновления 1");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (!playerData.isPresent()) {
+            System.out.println("что-то пошло не так в методе обновления 2");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Player updatedPlayer;
+        try {
+            updatedPlayer = playerData.get();
+
+            if (!player.getName().equals(null)) {
+                updatedPlayer.setName(player.getName());
+            }
+
+            if (!player.getTitle().equals(null)) {
+                updatedPlayer.setTitle(player.getTitle());
+            }
+
+            if (!player.getRace().equals(null)) {
+                updatedPlayer.setRace(player.getRace());
+            }
+
+            if (!player.getProfession().equals(null)) {
+                updatedPlayer.setProfession(player.getProfession());
+            }
+
+            if (!player.getExperience().equals(null)) {
+                updatedPlayer.setExperience(player.getExperience());
+            }
+
+            if (!player.getBirthday().equals(null)) {
+                updatedPlayer.setBirthday(player.getBirthday());
+            }
+
+        } catch (Exception e) {
+            System.out.println("что-то пошло не так в методе обновления 3");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(playerRepository.save(updatedPlayer), HttpStatus.OK);
     }
 }
 
