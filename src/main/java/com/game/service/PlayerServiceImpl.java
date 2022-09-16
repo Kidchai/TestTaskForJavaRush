@@ -1,11 +1,9 @@
 package com.game.service;
 
-import com.game.dao.PlayerDAO;
 import com.game.entity.Player;
 import com.game.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -25,9 +23,6 @@ public class PlayerServiceImpl implements PlayerService {
         playerList.addAll((List<Player>)playerRepository.findAll());
         return playerList;
     }
-
-//    @Autowired
-//    private PlayerDAO playerDAO;
 //
 //    @Override
 //    @Transactional
