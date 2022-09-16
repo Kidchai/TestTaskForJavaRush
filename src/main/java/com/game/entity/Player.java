@@ -23,6 +23,11 @@ public class Player {
         this.banned = banned;
     }
 
+    public Player(String name, String title) {
+        this.name = name;
+        this.title = title;
+    }
+
     public Long getId() {
         return id;
     }
@@ -105,7 +110,7 @@ public class Player {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name="id")
     private Long id;
     @Column (name="name")
