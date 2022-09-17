@@ -1,41 +1,86 @@
 package com.game.controller;
 
 import com.game.entity.Player;
+import com.game.entity.Profession;
+import com.game.entity.Race;
 import com.game.repository.PlayerRepository;
+import com.game.service.PlayerService;
 import com.game.validator.PlayerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 //мой класс
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/rest")
 public class RESTController {
+    //@Autowired
+    private PlayerService playerService;
+
+    @Autowired
+    public void playerService(PlayerService playerService) {
+        this.playerService = playerService;
+    }
 
     @Autowired
     PlayerRepository playerRepository;
 
     @GetMapping("/players")
-    public ResponseEntity<List<Player>> getAllPlayers(@RequestParam(required = false) String title) {
-        try {
-            List<Player> players = new ArrayList<>();
-            playerRepository.findAll().forEach(players::add);
+    public ResponseEntity<List<Player>> getAllPlayers(@RequestParam(required = false) String a,
+                                              @RequestParam(value = "name", required = false) String name,
+                                              @RequestParam(value = "title", required = false) String title,
+                                              @RequestParam(value = "race", required = false) Race race,
+                                              @RequestParam(value = "profession", required = false) Profession profession,
+                                              @RequestParam(value = "after", required = false) Date after,
+                                              @RequestParam(value = "before", required = false) Date before,
+                                              @RequestParam(value = "banned", required = false) Boolean banned,
+                                              @RequestParam(value = "minExperience", required = false) Integer minExperience,
+                                              @RequestParam(value = "maxExperience", required = false) Integer maxExperience,
+                                              @RequestParam(value = "minLevel", required = false) Integer minLevel,
+                                              @RequestParam(value = "maxLevel", required = false) Integer maxLevel,
+                                              @RequestParam(value = "order", required = false, defaultValue = "ID") PlayerOrder order,
+                                              @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+                                              @RequestParam(value = "pageSize", required = false, defaultValue = "3") Integer pageSize) {
 
-            if (players.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(players, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        Pageable sortedBy = PageRequest.of(pageNumber, pageSize, Sort.by(order.getFieldName()));
+
+        Specification<Player> specification = Specification.where(playerService.selectByName(name)
+                .and(playerService.selectByTitle(title))
+                .and(playerService.selectByRace(race))
+                .and(playerService.selectByProfession(profession))
+                .and(playerService.selectByBirthday(after, before))
+                .and(playerService.selectByBanned(banned))
+                .and(playerService.selectByExperience(minExperience, maxExperience))
+                .and(playerService.selectByLevel(minLevel, maxLevel)));
+
+        Page<Player> pages = playerService.getPlayers(specification, sortedBy);
+
+        return new ResponseEntity<>(pages.getContent(), HttpStatus.OK);
     }
+
+//    @GetMapping("/players")
+//    public ResponseEntity<List<Player>> getAllPlayers(@RequestParam(required = false) String title) {
+//        try {
+//            List<Player> players = new ArrayList<>();
+//            playerRepository.findAll().forEach(players::add);
+//
+//            if (players.isEmpty()) {
+//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//            }
+//            return new ResponseEntity<>(players, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 //    @GetMapping("players/count")
 //    public ResponseEntity<Player> countPlayers(@RequestParam) {
@@ -58,9 +103,18 @@ public class RESTController {
     @PostMapping("/players")
     public ResponseEntity<Player> createPlayer(@RequestBody Player player) {
         System.out.println("метод добавления запустился");
+
+        if (player.getName() == null ||
+            player.getTitle() == null ||
+            player.getRace() == null ||
+            player.getProfession() == null ||
+            player.getBirthday() == null ||
+            player.getExperience() == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
         try {
-            Player newPlayer = playerRepository
-                    .save(player);
+            Player newPlayer = playerRepository.save(player);
 //                    .save(new Player(player.getName(),
 //                    player.getTitle()));
 
