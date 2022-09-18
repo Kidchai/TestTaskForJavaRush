@@ -90,8 +90,9 @@ public class RESTController {
     @GetMapping("/players/{id}")
     public ResponseEntity<Player> getPlayerById(@PathVariable("id") long id) {
         Optional<Player> playerData = playerRepository.findById(id);
+        PlayerValidator playerValidator = new PlayerValidator();
 
-        if (id < 1) {
+        if (playerValidator.isIDIncorrect(id)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -171,10 +172,10 @@ public class RESTController {
 
     @DeleteMapping("/players/{id}")
     public ResponseEntity<Player> deletePlayer(@PathVariable("id") long id) {
-
         Optional<Player> playerData = playerRepository.findById(id);
+        PlayerValidator playerValidator = new PlayerValidator();
 
-        if (id < 1) {
+        if (playerValidator.isIDIncorrect(id)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -194,22 +195,21 @@ public class RESTController {
     @PostMapping("/players/{id}")
     public ResponseEntity<Player> updatePlayer(@PathVariable("id") long id, @RequestBody Player player) {
 
-        try {
-            new PlayerValidator(player.getName(), player.getTitle(), player.getExperience(), player.getBirthday());
-        } catch (IllegalArgumentException e) {
+        PlayerValidator playerValidator = new PlayerValidator();
+
+        if (playerValidator.isRequestForUpdateIncorrect(player)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Optional<Player> playerData = playerRepository.findById(id);
 
-        if (id < 1) {
-            System.out.println("что-то пошло не так в методе обновления 1");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
         if (!playerData.isPresent()) {
             System.out.println("что-то пошло не так в методе обновления 2");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (playerValidator.isRequestEmpty(player)) {
+            return new ResponseEntity<>(playerData.get(), HttpStatus.OK);
         }
 
         Player updatedPlayer;
