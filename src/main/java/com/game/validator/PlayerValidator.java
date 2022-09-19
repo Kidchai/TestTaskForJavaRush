@@ -11,12 +11,6 @@ public class PlayerValidator {
     }
 
     public boolean isRequestForUpdateIncorrect(Player player) {
-        if (player.getId() != null) {
-            if (player.getId() < 1) {
-                return true;
-            }
-        }
-
         String name = player.getName();
         String title = player.getTitle();
         Integer experience = player.getExperience();
@@ -50,5 +44,9 @@ public class PlayerValidator {
     public boolean isRequestEmpty(Player player) {
         return (player.getName() == null && player.getTitle() == null &&
                 player.getRace() == null && player.getBirthday() == null);
+    }
+
+    public boolean isIdIncorrect(Long id) {
+        return id < 1;
     }
 }

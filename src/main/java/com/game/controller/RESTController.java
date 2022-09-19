@@ -218,23 +218,28 @@ public class RESTController {
     }
 
     @PostMapping("/players/{id}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable("id") long id, @RequestBody Player player) {
+    public ResponseEntity<Player> updatePlayer(@PathVariable("id") Long id, @RequestBody Player player) {
 
         PlayerValidator playerValidator = new PlayerValidator();
 
-        if (playerValidator.isRequestForUpdateIncorrect(player)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
         Optional<Player> playerData = playerRepository.findById(id);
+
+        if (playerValidator.isRequestEmpty(player)) {
+            return new ResponseEntity<>(playerData.get(), HttpStatus.OK);
+        }
+
+        if (playerValidator.isIdIncorrect(id)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         if (!playerData.isPresent()) {
             System.out.println("что-то пошло не так в методе обновления 2");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if (playerValidator.isRequestEmpty(player)) {
-            return new ResponseEntity<>(playerData.get(), HttpStatus.OK);
+        if (playerValidator.isRequestForUpdateIncorrect(player)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Player updatedPlayer;
