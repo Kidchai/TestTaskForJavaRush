@@ -23,10 +23,10 @@ public class Player {
         this.banned = banned;
     }
 
-    public Player(String name, String title) {
-        this.name = name;
-        this.title = title;
-    }
+//    public Player(String name, String title) {
+//        this.name = name;
+//        this.title = title;
+//    }
 
     public Long getId() {
         return id;

@@ -10,7 +10,7 @@ public class PlayerValidator {
         return (id < 1);
     }
 
-    public boolean isRequestForUpdateIncorrect(Player player) {
+    public boolean isRequestIncorrect(Player player) {
         String name = player.getName();
         String title = player.getTitle();
         Integer experience = player.getExperience();
@@ -43,7 +43,9 @@ public class PlayerValidator {
 
     public boolean isRequestEmpty(Player player) {
         return (player.getName() == null && player.getTitle() == null &&
-                player.getRace() == null && player.getBirthday() == null);
+                player.getRace() == null && player.getProfession() == null &&
+                player.getBirthday() == null && player.getExperience() == null &&
+                player.getBanned() == null);
     }
 
     public boolean isIdIncorrect(Long id) {

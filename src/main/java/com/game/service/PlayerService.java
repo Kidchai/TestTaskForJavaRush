@@ -23,4 +23,8 @@ public interface PlayerService {
     Specification<Player> selectByExperience(Integer minExperience, Integer maxExperience);
     Specification<Player> selectByLevel(Integer minLevel, Integer maxLevel);
     Page<Player> getPlayers(Specification<Player> specification, Pageable sortedBy);
+
+    Integer calculateLevel(Integer experience);
+
+    Integer calculateExpUntilNextLevel(Integer experience, Integer level);
 }

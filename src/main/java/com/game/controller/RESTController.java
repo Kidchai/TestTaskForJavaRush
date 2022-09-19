@@ -128,7 +128,6 @@ public class RESTController {
 
     @PostMapping("/players")
     public ResponseEntity<Player> createPlayer(@RequestBody Player player) {
-        System.out.println("метод добавления запустился");
 
         if (player.getName() == null ||
             player.getTitle() == null ||
@@ -139,7 +138,17 @@ public class RESTController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
+        PlayerValidator validator = new PlayerValidator();
+        if (validator.isRequestIncorrect(player)) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
         try {
+            Integer level = playerService.calculateLevel(player.getExperience());
+            player.setLevel(level);
+            Integer expUntilNextLevel = playerService.calculateExpUntilNextLevel(player.getExperience(), level);
+            player.setUntilNextLevel(expUntilNextLevel);
+
             Player newPlayer = playerRepository.save(player);
 //                    .save(new Player(player.getName(),
 //                    player.getTitle()));
@@ -238,7 +247,7 @@ public class RESTController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if (playerValidator.isRequestForUpdateIncorrect(player)) {
+        if (playerValidator.isRequestIncorrect(player)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -274,6 +283,11 @@ public class RESTController {
             System.out.println("что-то пошло не так в методе обновления 3");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        Integer level = playerService.calculateLevel(player.getExperience());
+        player.setLevel(level);
+        Integer expUntilNextLevel = playerService.calculateExpUntilNextLevel(player.getExperience(), level);
+        player.setUntilNextLevel(expUntilNextLevel);
 
         return new ResponseEntity<>(playerRepository.save(updatedPlayer), HttpStatus.OK);
     }

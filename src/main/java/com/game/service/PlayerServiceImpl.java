@@ -147,5 +147,16 @@ public class PlayerServiceImpl implements PlayerService {
         return playerRepository.findAll(specification, sortedBy);
     }
 
+    @Override
+    public Integer calculateLevel(Integer exp) {
+        double result = (Math.sqrt(2500 + 200 * exp) - 50) / 100;
+        return (int) result;
+    }
+
+    @Override
+    public Integer calculateExpUntilNextLevel(Integer exp, Integer lvl) {
+        return 50 * (lvl + 1) * (lvl + 2) - 2;
+    }
+
 
 }
