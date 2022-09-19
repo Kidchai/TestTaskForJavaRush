@@ -18,7 +18,7 @@ public interface PlayerService {
     Specification<Player> selectByTitle(String title);
     Specification<Player> selectByRace(Race race);
     Specification<Player> selectByProfession(Profession profession);
-    Specification<Player> selectByBirthday(Date after, Date before);
+    Specification<Player> selectByBirthday(Long after, Long before);
     Specification<Player> selectByBanned(Boolean banned);
     Specification<Player> selectByExperience(Integer minExperience, Integer maxExperience);
     Specification<Player> selectByLevel(Integer minLevel, Integer maxLevel);

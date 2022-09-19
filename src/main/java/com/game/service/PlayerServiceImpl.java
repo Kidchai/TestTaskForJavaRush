@@ -12,9 +12,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 //мой класс
 @Service
 public class PlayerServiceImpl implements PlayerService {
@@ -72,7 +71,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Specification<Player> selectByBirthday(Date after, Date before) {
+    public Specification<Player> selectByBirthday(Long after, Long before) {
         return (root, query, criteriaBuilder) -> {
             if (after == null && before == null) {
                 return null;
@@ -85,14 +84,14 @@ public class PlayerServiceImpl implements PlayerService {
             if (before == null) {
                 return criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), after);
             }
-//                Calendar beforeCalendar = new GregorianCalendar();
-//                beforeCalendar.setTime(before);
-//                beforeCalendar.set(Calendar.HOUR, 0);
-//                beforeCalendar.add(Calendar.MILLISECOND, -1);
-//
-//                Date tempBefore = beforeCalendar.getTime();
+            Date dateAfter = new Date(after);
+            Date dateBefore = new Date(before);
+            Calendar calendarBefore = new GregorianCalendar();
+            calendarBefore.setTime(dateBefore);
+            calendarBefore.add(Calendar.DAY_OF_MONTH, 1);
+            dateBefore.setTime(calendarBefore.getTimeInMillis());
 
-            return criteriaBuilder.between(root.get("birthday"), after, before);
+            return criteriaBuilder.between(root.get("birthday"), dateAfter, dateBefore);
         };
     }
 

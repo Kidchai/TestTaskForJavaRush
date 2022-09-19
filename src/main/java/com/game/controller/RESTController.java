@@ -39,8 +39,8 @@ public class RESTController {
                                               @RequestParam(value = "title", required = false) String title,
                                               @RequestParam(value = "race", required = false) Race race,
                                               @RequestParam(value = "profession", required = false) Profession profession,
-                                              @RequestParam(value = "after", required = false) Date after,
-                                              @RequestParam(value = "before", required = false) Date before,
+                                              @RequestParam(value = "after", required = false) Long after,
+                                              @RequestParam(value = "before", required = false) Long before,
                                               @RequestParam(value = "banned", required = false) Boolean banned,
                                               @RequestParam(value = "minExperience", required = false) Integer minExperience,
                                               @RequestParam(value = "maxExperience", required = false) Integer maxExperience,
@@ -50,20 +50,26 @@ public class RESTController {
                                               @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
                                               @RequestParam(value = "pageSize", required = false, defaultValue = "3") Integer pageSize) {
 
-        Pageable sortedBy = PageRequest.of(pageNumber, pageSize, Sort.by(order.getFieldName()));
+        try {
+            Pageable sortedBy = PageRequest.of(pageNumber, pageSize, Sort.by(order.getFieldName()));
 
-        Specification<Player> specification = Specification.where(playerService.selectByName(name)
-                .and(playerService.selectByTitle(title))
-                .and(playerService.selectByRace(race))
-                .and(playerService.selectByProfession(profession))
-                .and(playerService.selectByBirthday(after, before))
-                .and(playerService.selectByBanned(banned))
-                .and(playerService.selectByExperience(minExperience, maxExperience))
-                .and(playerService.selectByLevel(minLevel, maxLevel)));
+            Specification<Player> specification = Specification.where(playerService.selectByName(name)
+                    .and(playerService.selectByTitle(title))
+                    .and(playerService.selectByRace(race))
+                    .and(playerService.selectByProfession(profession))
+                    .and(playerService.selectByBirthday(after, before))
+                    .and(playerService.selectByBanned(banned))
+                    .and(playerService.selectByExperience(minExperience, maxExperience))
+                    .and(playerService.selectByLevel(minLevel, maxLevel)));
 
-        Page<Player> pages = playerService.getPlayers(specification, sortedBy);
+            Page<Player> pages = playerService.getPlayers(specification, sortedBy);
 
-        return new ResponseEntity<>(pages.getContent(), HttpStatus.OK);
+            return new ResponseEntity<>(pages.getContent(), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
     }
 
     @GetMapping("/players/count")
@@ -71,8 +77,8 @@ public class RESTController {
                                                @RequestParam(value = "title", required = false) String title,
                                                @RequestParam(value = "race", required = false) Race race,
                                                @RequestParam(value = "profession", required = false) Profession profession,
-                                               @RequestParam(value = "after", required = false) Date after,
-                                               @RequestParam(value = "before", required = false) Date before,
+                                               @RequestParam(value = "after", required = false) Long after,
+                                               @RequestParam(value = "before", required = false) Long before,
                                                @RequestParam(value = "banned", required = false) Boolean banned,
                                                @RequestParam(value = "minExperience", required = false) Integer minExperience,
                                                @RequestParam(value = "maxExperience", required = false) Integer maxExperience,
