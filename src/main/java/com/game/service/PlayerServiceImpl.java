@@ -57,7 +57,7 @@ public class PlayerServiceImpl implements PlayerService {
             if (race == null) {
                 return null;
             }
-            return criteriaBuilder.like(root.get("race"), "%" + race + "%");
+            return criteriaBuilder.equal(root.get("race"), race);
         };
     }
 
@@ -67,7 +67,7 @@ public class PlayerServiceImpl implements PlayerService {
             if (profession == null) {
                 return null;
             }
-            return criteriaBuilder.like(root.get("profession"), "%" + profession + "%");
+            return criteriaBuilder.equal(root.get("profession"), profession);
         };
     }
 
@@ -157,6 +157,4 @@ public class PlayerServiceImpl implements PlayerService {
     public Integer calculateExpUntilNextLevel(Integer exp, Integer lvl) {
         return 50 * (lvl + 1) * (lvl + 2) - 2;
     }
-
-
 }
