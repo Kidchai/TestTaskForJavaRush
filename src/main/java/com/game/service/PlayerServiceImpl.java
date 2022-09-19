@@ -154,6 +154,6 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Integer calculateExpUntilNextLevel(Integer exp, Integer lvl) {
-        return 50 * (lvl + 1) * (lvl + 2) - 2;
+        return 50 * (lvl + 1) * (lvl + 2) - exp;
     }
 }
