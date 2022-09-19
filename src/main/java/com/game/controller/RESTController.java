@@ -261,39 +261,39 @@ public class RESTController {
         try {
             updatedPlayer = playerData.get();
 
-            if (!player.getName().equals(null)) {
+            if (player.getName() != null) {
                 updatedPlayer.setName(player.getName());
             }
 
-            if (!player.getTitle().equals(null)) {
+            if (player.getTitle() != null) {
                 updatedPlayer.setTitle(player.getTitle());
             }
 
-            if (!player.getRace().equals(null)) {
+            if (player.getRace() != null) {
                 updatedPlayer.setRace(player.getRace());
             }
 
-            if (!player.getProfession().equals(null)) {
+            if (player.getProfession() != null) {
                 updatedPlayer.setProfession(player.getProfession());
             }
 
-            if (!player.getExperience().equals(null)) {
+            if (player.getExperience() != null) {
                 updatedPlayer.setExperience(player.getExperience());
+                Integer level = playerService.calculateLevel(player.getExperience());
+                player.setLevel(level);
+                Integer expUntilNextLevel = playerService.calculateExpUntilNextLevel(player.getExperience(), level);
+                player.setUntilNextLevel(expUntilNextLevel);
             }
 
-            if (!player.getBirthday().equals(null)) {
+            if (player.getBirthday() != null) {
                 updatedPlayer.setBirthday(player.getBirthday());
             }
 
         } catch (Exception e) {
             System.out.println("что-то пошло не так в методе обновления 3");
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        Integer level = playerService.calculateLevel(player.getExperience());
-        player.setLevel(level);
-        Integer expUntilNextLevel = playerService.calculateExpUntilNextLevel(player.getExperience(), level);
-        player.setUntilNextLevel(expUntilNextLevel);
 
         return new ResponseEntity<>(playerRepository.save(updatedPlayer), HttpStatus.OK);
     }
