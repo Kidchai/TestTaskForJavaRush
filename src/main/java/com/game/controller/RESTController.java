@@ -289,6 +289,10 @@ public class RESTController {
                 updatedPlayer.setBirthday(player.getBirthday());
             }
 
+            if (player.getBanned() != null) {
+                updatedPlayer.setBanned(player.getBanned());
+            }
+
         } catch (Exception e) {
             System.out.println("что-то пошло не так в методе обновления 3");
             e.printStackTrace();
