@@ -280,9 +280,9 @@ public class RESTController {
             if (player.getExperience() != null) {
                 updatedPlayer.setExperience(player.getExperience());
                 Integer level = playerService.calculateLevel(player.getExperience());
-                player.setLevel(level);
+                updatedPlayer.setLevel(level);
                 Integer expUntilNextLevel = playerService.calculateExpUntilNextLevel(player.getExperience(), level);
-                player.setUntilNextLevel(expUntilNextLevel);
+                updatedPlayer.setUntilNextLevel(expUntilNextLevel);
             }
 
             if (player.getBirthday() != null) {

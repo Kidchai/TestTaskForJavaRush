@@ -10,22 +10,17 @@ import java.util.Date;
 @Table(name="player")
 public class Player {
     public Player() {}
-    public Player(String name, String title, Race race, Profession profession, Integer experience, Integer level,
-                  Integer untilNextLevel, Date birthday, Boolean banned) {
-        this.name = name;
-        this.title = title;
-        this.race = race;
-        this.profession = profession;
-        this.experience = experience;
-        this.level = level;
-        this.untilNextLevel = untilNextLevel;
-        this.birthday = birthday;
-        this.banned = banned;
-    }
-
-//    public Player(String name, String title) {
+//    public Player(String name, String title, Race race, Profession profession, Integer experience, Integer level,
+//                  Integer untilNextLevel, Date birthday, Boolean banned) {
 //        this.name = name;
 //        this.title = title;
+//        this.race = race;
+//        this.profession = profession;
+//        this.experience = experience;
+//        this.level = level;
+//        this.untilNextLevel = untilNextLevel;
+//        this.birthday = birthday;
+//        this.banned = banned;
 //    }
 
     public Long getId() {
@@ -82,10 +77,6 @@ public class Player {
 
     public void setLevel(Integer level) {
         this.level = level;
-    }
-
-    public Integer getUntilNextLevel() {
-        return untilNextLevel;
     }
 
     public void setUntilNextLevel(Integer untilNextLevel) {
@@ -149,15 +140,4 @@ public class Player {
                 ", banned=" + banned +
                 '}';
     }
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj)
-//            return true;
-//        if (obj == null)
-//            return false;
-//        if (getClass() != obj.getClass())
-//            return false;
-//        return true;
-//    }
 }
