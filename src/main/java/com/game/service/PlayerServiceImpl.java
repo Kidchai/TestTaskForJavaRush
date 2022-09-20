@@ -11,24 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
-//мой класс
 @Service
 public class PlayerServiceImpl implements PlayerService {
-
-    private List<Player> playerList = new ArrayList<>();
-
     @Autowired
     private PlayerRepository playerRepository;
-
-    @Override
-    @Transactional
-    public List<Player> getAllPlayers(){
-        playerList.addAll(playerRepository.findAll());
-        return playerList;
-    }
 
     @Override
     public Specification<Player> selectByName(String name) {
@@ -78,11 +66,11 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             if (after == null) {
-                return criteriaBuilder.lessThanOrEqualTo(root.get("birthday"), before);
+                return criteriaBuilder.lessThanOrEqualTo(root.get("birthday"), new Date(before));
             }
 
             if (before == null) {
-                return criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), after);
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), new Date(after));
             }
             Date dateAfter = new Date(after);
             Date dateBefore = new Date(before);
@@ -144,6 +132,11 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Page<Player> getPlayers(Specification<Player> specification, Pageable sortedBy) {
         return playerRepository.findAll(specification, sortedBy);
+    }
+
+    @Override
+    public Integer countPlayers(Specification<Player> specification) {
+        return playerRepository.findAll(specification).size();
     }
 
     @Override

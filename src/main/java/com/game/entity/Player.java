@@ -7,29 +7,13 @@ import javax.persistence.*;
 import java.util.Date;
 //мой класс
 @Entity
-@Table(name="player")
+@Table(name = "player")
 public class Player {
     public Player() {}
-//    public Player(String name, String title, Race race, Profession profession, Integer experience, Integer level,
-//                  Integer untilNextLevel, Date birthday, Boolean banned) {
-//        this.name = name;
-//        this.title = title;
-//        this.race = race;
-//        this.profession = profession;
-//        this.experience = experience;
-//        this.level = level;
-//        this.untilNextLevel = untilNextLevel;
-//        this.birthday = birthday;
-//        this.banned = banned;
-//    }
 
     public Long getId() {
         return id;
     }
-
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
 
     public String getName() {
         return name;
@@ -83,7 +67,7 @@ public class Player {
         this.untilNextLevel = untilNextLevel;
     }
 
-    @JsonSerialize(using = DateSerializer.class)
+    //@JsonSerialize(using = DateSerializer.class)
     public Date getBirthday() {
         return birthday;
     }
@@ -102,27 +86,27 @@ public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name="id")
+    @Column (name = "id", nullable = false)
     private Long id;
-    @Column (name="name")
+    @Column (name = "name", nullable = false)
     private String name;
-    @Column (name="title")
+    @Column (name = "title", nullable = false)
     private String title;
-    @Column (name="race")
+    @Column (name = "race", nullable = false)
     @Enumerated(EnumType.STRING)
     private Race race;
-    @Column (name="profession")
+    @Column (name = "profession", nullable = false)
     @Enumerated(EnumType.STRING)
     private Profession profession;
-    @Column (name="experience")
+    @Column (name = "experience", nullable = false)
     private Integer experience;
-    @Column (name="level")
+    @Column (name = "level", nullable = false)
     private Integer level;
-    @Column (name="untilNextLevel")
+    @Column (name = "untilNextLevel", nullable = false)
     private Integer untilNextLevel;
-    @Column (name="birthday")
+    @Column (name = "birthday", nullable = false)
     private Date birthday;
-    @Column (name="banned")
+    @Column (name = "banned", nullable = false)
     private Boolean banned;
 
     @Override

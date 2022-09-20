@@ -8,12 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Date;
-import java.util.List;
-//мой интерфейс
 public interface PlayerService {
-    public List<Player> getAllPlayers();
-
     Specification<Player> selectByName(String name);
     Specification<Player> selectByTitle(String title);
     Specification<Player> selectByRace(Race race);
@@ -23,8 +18,7 @@ public interface PlayerService {
     Specification<Player> selectByExperience(Integer minExperience, Integer maxExperience);
     Specification<Player> selectByLevel(Integer minLevel, Integer maxLevel);
     Page<Player> getPlayers(Specification<Player> specification, Pageable sortedBy);
-
+    Integer countPlayers(Specification<Player> specification);
     Integer calculateLevel(Integer experience);
-
     Integer calculateExpUntilNextLevel(Integer experience, Integer level);
 }
