@@ -11,7 +11,7 @@ You need to implement these features:
 6. Receive a filtered list of players by the passed filters.
 7. Get the number of players that match the filters.
 
-For more details see [complete assessment.] (https://github.com/Kidchai/TestTaskForJavaRush/blob/main/TestTask.pdf)
+For more details see [complete assessment.](https://github.com/Kidchai/TestTaskForJavaRush/blob/main/TestTask.pdf)
 
 ## Details ##
 Create an entity ***Player*** with such fields
@@ -33,13 +33,13 @@ The program must count the current character's level and the experience the user
 Before every saving character on the database (if creating a new character or updating characteristics of the existing one).
 
 The formula for the current level
-$$ L = {\sqrt{2500 + 200 * exp} \over 100} $$
+### $L = {\sqrt{2500 + 200 * exp} \over 100}$
 
 The formula for experience until the next level
-$$ 𝑁 = 50 ∙ (𝑙𝑣𝑙 + 1) ∙ (𝑙𝑣𝑙 + 2) − 𝑒𝑥 $$
+### $𝑁 = 50 * (𝑙𝑣𝑙 + 1) * (𝑙𝑣𝑙 + 2) − 𝑒𝑥$
 
 ## Realisation and tools ##
-This task is an implementation of the RESTful web service.
+This task is an implementation of the RESTful web service. I used just Java (JavaScript part was already prepared).
 
 This project's most exciting and challenging part was a multiple columns search by the passed filters.
 And I decided to use the Specification framework from Spring Data Jpa for creating dynamic queries.
