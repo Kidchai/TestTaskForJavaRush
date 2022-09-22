@@ -1,7 +1,5 @@
 # Test assignment for internship in JavaRush company #
-***
 ## Task ##
-***
 Finish the app for an administrator of the network RPG. Administrator must be able to edit parameters of characters (players), create and remove characters, and distribute bans.
 
 You need to implement these features:
@@ -13,8 +11,9 @@ You need to implement these features:
 6. Receive a filtered list of players by the passed filters.
 7. Get the number of players that match the filters.
 
+For more details see [complete assessment.] (https://github.com/Kidchai/TestTaskForJavaRush/blob/main/TestTask.pdf)
+
 ## Details ##
-***
 Create an entity ***Player*** with such fields
 
 | Variable               | Description                                                    |
@@ -40,10 +39,9 @@ The formula for experience until the next level
 $$ 𝑁 = 50 ∙ (𝑙𝑣𝑙 + 1) ∙ (𝑙𝑣𝑙 + 2) − 𝑒𝑥 $$
 
 ## Realisation and tools ##
-***
 This task is an implementation of the RESTful web service.
 
-The most interesting and challenging part of this project was a multiple columns search by the passed filters.
-And I decided to use *Specification* framework from *Spring Data Jpa* for creation dynamic queries.
+This project's most exciting and challenging part was a multiple columns search by the passed filters.
+And I decided to use the Specification framework from Spring Data Jpa for creating dynamic queries.
 
-For characters storage I use *MySQL* database. And, of course, I use such tools as *Maven* and *Tomcat*.
+For character storage, I use the MySQL database. And, of course, I use such tools as Maven and Tomcat.
